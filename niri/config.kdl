@@ -1,0 +1,276 @@
+// "/-" comments out the following node.
+// Check the wiki for a full description of the configuration:
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Introduction
+input {
+    keyboard {
+        xkb {
+            layout "us"
+            variant ","
+            // options "grp:alt_space_toggle"
+        }
+
+        repeat-delay 300
+        repeat-rate 40
+
+        // Enable numlock on startup, omitting this setting disables it.
+        numlock
+    }
+
+    touchpad {
+        // off
+        tap
+        // dwt
+        // dwtp
+        // drag false
+        // drag-lock
+        natural-scroll
+        // accel-speed 0.2
+        // accel-profile "flat"
+        // scroll-method "two-finger"
+        // disabled-on-external-mouse
+    }
+
+    mouse {
+        // off
+        // natural-scroll
+        accel-speed 0.5
+        accel-profile "flat"
+        // scroll-method "no-scroll"
+    }
+
+    trackpoint {
+        // off
+        // natural-scroll
+        // accel-speed 0.2
+        // accel-profile "flat"
+        // scroll-method "on-button-down"
+        // scroll-button 273
+        // middle-emulation
+    }
+
+    // warp-mouse-to-focus
+
+    focus-follows-mouse max-scroll-amount="95%"
+}
+
+// You can configure outputs by their name
+// Find more information on the wiki:
+// https://github.com/YaLTeR/niri/wiki/Configuration:-outputs
+
+output "eDP-1" {
+
+    // The format is "<width>x<height>" or "<width>x<height>@<refresh rate>".
+    // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
+    mode "1366x768"
+
+    // You can use integer or fractional scale, for example use 1.5 for 150% scale.
+    scale 1
+
+    // Transform allows to rotate the output counter-clockwise, valid values are:
+    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
+    transform "normal"
+
+    // Position of the output in the global coordinate space.
+    // The cursor can only move between directly adjacent outputs.
+    // If the position is unset or results in an overlap, the output is instead placed automatically.
+    // position x=1280 y=0
+}
+
+// overview settings yay!!!
+overview {
+    backdrop-color "#0F050A"
+}
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+// Settings that influence how windows are positioned and sized.
+// Find more information on the wiki:
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Layout
+layout {
+    // Set gaps around windows in logical pixels.
+    gaps 8
+
+    // When to center a column when changing focus, options are:
+    // - "never", default behavior, focusing an off-screen column will keep at the left
+    //   or right edge of the screen.
+    // - "always", the focused column will always be centered.
+    // - "on-overflow", focusing a column will center it if it doesn't fit
+    //   together with the previously focused column.
+    center-focused-column "never"
+
+    // You can customize the widths that "switch-preset-column-width" (Mod+R) toggles between.
+    preset-column-widths {
+        proportion 0.5
+        proportion 0.8
+    }
+
+    default-column-width { proportion 0.8; }
+
+    focus-ring {
+        // Uncomment this line to disable the focus ring.
+        // off
+
+        width 2
+        active-color "#D894CF"
+        inactive-color "#261924"
+    }
+}
+
+spawn-at-startup "xwayland-satellite"
+spawn-at-startup "swww-daemon"
+spawn-at-startup "bash" "-c" "mpc add / && mpc shuffle"
+spawn-at-startup "megasync"
+spawn-at-startup "bash" "-c" "qs -d && sleep 0.5 && touch ~/.config/quickshell/shell.qml"
+
+environment {
+    DISPLAY ":0"
+    QT_QPA_PLATFORMTHEME "qt6ct"
+}
+
+cursor {
+    xcursor-theme "McMojave-cursors"
+    xcursor-size 24
+}
+
+prefer-no-csd
+
+// saves screenshots to clipboard only
+screenshot-path "null"
+
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Animations
+animations {
+    // Uncomment to turn off all animations.
+    // off
+
+    // Slow down all animations by this factor. Values below 1 speed them up instead.
+    // slowdown 3.0
+}
+
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules
+
+// enable rounded corners for all windows.
+window-rule {
+    geometry-corner-radius 8
+    clip-to-geometry true
+}
+
+window-rule {
+    match title="MEGAsync"
+    open-floating true
+
+    focus-ring {
+        off
+    }
+}
+
+gestures {
+    dnd-edge-view-scroll {
+        trigger-width 30
+        delay-ms 100
+        max-speed 1500
+    }
+
+    dnd-edge-workspace-switch {
+        trigger-height 50
+        delay-ms 100
+        max-speed 1500
+    }
+
+    hot-corners {
+        off
+    }
+}
+
+binds {
+    Mod+Return              { spawn "kitty"; }
+    Mod+Space               { spawn "fuzzel"; }
+    Mod+E                   { spawn "nautilus" "-w"; }
+    Mod+Shift+R             { spawn "bash" "-c" "pgrep waybar >/dev/null 2>&1 && killall -SIGUSR2 waybar || waybar"; }
+    Mod+P                   { spawn "hyprpicker" "-a"; }
+    Mod+M                   { spawn "kitty" "rmpc"; }
+    Mod+B                   { spawn "firefox"; }
+    Mod+O repeat=false      { toggle-overview; }
+    Mod+Q                   { close-window; }
+    Mod+V                   { toggle-window-floating; }
+    Mod+W                   { toggle-column-tabbed-display; }
+    Mod+C                   { center-column; }
+    
+    Mod+F                   { maximize-column; }
+    Mod+Shift+F             { fullscreen-window; }
+    Mod+Ctrl+F              { expand-column-to-available-width; }
+    Mod+R                   { switch-preset-column-width; }
+
+    Mod+Left                { focus-column-left; }
+    Mod+Down                { focus-window-down; }
+    Mod+Up                  { focus-window-up; }
+    Mod+Right               { focus-column-right; }
+    Mod+H                   { focus-column-left; }
+    Mod+J                   { focus-window-down; }
+    Mod+K                   { focus-window-up; }
+    Mod+L                   { focus-column-right; }
+
+    Mod+U                   { focus-workspace-down; }
+    Mod+I                   { focus-workspace-up; }
+
+    Mod+Shift+Left          { move-column-left; }
+    Mod+Shift+Down          { move-window-down; }
+    Mod+Shift+Up            { move-window-up; }
+    Mod+Shift+Right         { move-column-right; }
+    Mod+Shift+H             { move-column-left; }
+    Mod+Shift+J             { move-window-down; }
+    Mod+Shift+K             { move-window-up; }
+    Mod+Shift+L             { move-column-right; }
+
+    Mod+Shift+U         { move-column-to-workspace-down; }
+    Mod+Shift+I         { move-column-to-workspace-up; }
+
+    Mod+comma               { consume-or-expel-window-left; }
+    Mod+period              { consume-or-expel-window-right; }
+
+    // screenshot functions
+    Print { screenshot; }
+    Ctrl+Print { screenshot-screen; }
+    Alt+Print { screenshot-window; }
+
+    // volume, brightness, and media control
+    XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.05+"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.05-"; }
+    XF86AudioMute        allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+    XF86AudioMicMute     allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+    XF86MonBrightnessUp                         { spawn "bash" "-c" "brightnessctl -n1 set 5%+"; }
+    XF86MonBrightnessDown                       { spawn "bash" "-c" "brightnessctl -n1 set 5%-"; }
+    XF86AudioNext                               { spawn "bash" "-c" "playerctl next"; }
+    XF86AudioPause                              { spawn "bash" "-c" "playerctl play-pause"; }
+    XF86AudioPlay                               { spawn "bash" "-c" "playerctl play-pause"; }
+    XF86AudioPrev                               { spawn "bash" "-c" "playerctl previous"; }
+
+    // mouse binds
+    // "cooldown" just limits how often you can use the bind, helpful so you don't
+    // switch workspaces too fast when scrolling
+    Mod+WheelScrollDown             { focus-workspace-down; }
+    Mod+WheelScrollUp               { focus-workspace-up; }
+    Mod+Shift+WheelScrollDown       { focus-column-right; }
+    Mod+Shift+WheelScrollUp         { focus-column-left; }
+
+    // workspace binds
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+    Mod+Shift+1 { move-window-to-workspace 1; }
+    Mod+Shift+2 { move-window-to-workspace 2; }
+    Mod+Shift+3 { move-window-to-workspace 3; }
+    Mod+Shift+4 { move-window-to-workspace 4; }
+    Mod+Shift+5 { move-window-to-workspace 5; }
+    Mod+Shift+6 { move-window-to-workspace 6; }
+    Mod+Shift+7 { move-window-to-workspace 7; }
+    Mod+Shift+8 { move-window-to-workspace 8; }
+    Mod+Shift+9 { move-window-to-workspace 9; }
+}
